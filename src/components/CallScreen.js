@@ -16,6 +16,7 @@ const CallScreen = () => {
   // Create audio ref
   const audioRef = useRef(new Audio(callAudio));
   const audioTimeoutRef = useRef(null);
+  const durationIntervalRef = useRef(null);
 
   useEffect(() => {
     // Configure audio
@@ -83,11 +84,11 @@ const CallScreen = () => {
       if ('vibrate' in navigator) {
         navigator.vibrate(0); // Stop any ongoing vibration
       }
-      const timer = setInterval(() => {
+      durationIntervalRef.current = setInterval(() => {
         setCallDuration(prev => prev + 1);
       }, 1000);
       return () => {
-        clearInterval(timer);
+        clearInterval(durationIntervalRef.current);
         clearTimeout(scrollTimeout);
       };
     }
@@ -149,12 +150,9 @@ const CallScreen = () => {
     audioTimeoutRef.current = setTimeout(() => {
       audioRef.current.currentTime = 0;
       try {
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.log('Audio playback error:', error);
-          });
-        }
+        audioRef.current.play().catch(error => {
+          console.log('Audio playback error:', error);
+        });
       } catch (error) {
         console.log('Audio playback error:', error);
       }
@@ -323,9 +321,9 @@ const CallScreen = () => {
             </div>
           </div>
         )}
-        <button onClick={testVibration} style={{position: 'absolute', top: 10, right: 10, zIndex: 1000}}>
+        {/* <button onClick={testVibration} style={{position: 'absolute', top: 10, right: 10, zIndex: 1000}}>
           Test Vibration
-        </button>
+        </button> */}
       </div>
       {showDialpad && renderDialpad()}
     </div>

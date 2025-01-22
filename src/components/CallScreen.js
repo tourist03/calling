@@ -115,7 +115,7 @@ const CallScreen = () => {
   return (
     <div className={`call-screen ${isScrolled ? 'scrolled' : ''}`}>
       <div className="background-image">
-        <img src="/profile-placeholder.jpg" alt="" />
+        <img src={`${process.env.PUBLIC_URL}/profile-placeholder.jpg`} alt="" />
       </div>
       <div className="content-overlay">
         {callState === 'incoming' ? (

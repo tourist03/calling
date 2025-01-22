@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './CallScreen.css';
+// Import the image directly
+import profileImage from '../assets/profile-placeholder.jpg';
 
 const CallScreen = () => {
   const [callState, setCallState] = useState('incoming'); // 'incoming' or 'ongoing'
@@ -89,6 +91,10 @@ const CallScreen = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    console.log('Image path:', profileImage);
+  }, []);
+
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -115,7 +121,14 @@ const CallScreen = () => {
   return (
     <div className={`call-screen ${isScrolled ? 'scrolled' : ''}`}>
       <div className="background-image">
-        <img src={`${process.env.PUBLIC_URL}/profile-placeholder.jpg`} alt="" />
+        <img 
+          src={profileImage} 
+          alt="" 
+          onError={(e) => {
+            console.error('Image failed to load');
+            console.log('Image path:', profileImage);
+          }}
+        />
       </div>
       <div className="content-overlay">
         {callState === 'incoming' ? (
